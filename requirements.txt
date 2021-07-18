@@ -1,0 +1,2 @@
+playsound==1.2.2
+twitchAPI==2.3.2
