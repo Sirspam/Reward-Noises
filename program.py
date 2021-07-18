@@ -68,7 +68,6 @@ def user_authenticate():
     dump(config, open("config.json","w"), sort_keys=True, indent=4)
 
 # Setting up Authentication and getting user id
-#twitch = Twitch("go1pnso8u1bmq1mgvigphu1joulfrq", "f71eqie6rg4z8ia9llkrlcjjq7ihrv")
 twitch = Twitch(config["app_auth"][0], config["app_auth"][1])
 if not config["user_auth"]:
     user_authenticate()
