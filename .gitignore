@@ -1,3 +1,7 @@
 __pycache__
 audio
+logs
+build
 config.json
+py2exe config.json
+versionfile.yml

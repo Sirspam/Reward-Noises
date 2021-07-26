@@ -9,12 +9,14 @@ Simple Twitch listener which plays audio on specified reward redemptions
  3. Run Reward-Noises.exe (Program will run then close)
  4. Open config.json
  5. Populate config.json accordingly, check [Config.json Definitions](#Config.json-Example) for info on the config
- 6.  Create corresponding rewards on [Twitch.tv dashboard](https://dashboard.twitch.tv/). **Ensure that reward name matches name defined in config.json**
+ 6. Create corresponding rewards on [Twitch.tv dashboard](https://dashboard.twitch.tv/). **Ensure that reward name matches name defined in config.json**
 6. Populate audio directory with your audio files (must be .mp3 or .wav) **Ensure that file names match names defined in config.json**
 
 ## Config.json Definitions
 #### app_auth
 This is a list which should contain your twitch application's ID and secret. If you haven't already made a twitch application it can be done on the [Twitch Developers](https://dev.twitch.tv/console/apps/create) site
+#### logging
+Set to true if you want the program to generate logs in external files
 #### logins
 This is a list which should contain the Twitch usernames of the accounts you want this lister to listen on
 #### rewards
@@ -32,6 +34,7 @@ This is a list which will contain your user authentication. This is automaticall
                 "App_ID",
                 "App_Secret"
             ],
+            "logging": false,
             "logins": ["sirspam_"],
             "rewards": {
                 "Baka (Sound)": ["Aqua_Baka.mp3"],

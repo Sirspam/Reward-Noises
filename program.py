@@ -3,6 +3,7 @@ from os import getcwd, mkdir, path
 from uuid import UUID
 from json import load, dump
 from random import choice
+from datetime import datetime
 
 from playsound import playsound
 
@@ -12,7 +13,12 @@ from twitchAPI.oauth import UserAuthenticator
 from twitchAPI.types import AuthScope, InvalidTokenException
 
 
-logging.basicConfig(format='%(asctime)s:%(levelname)s:%(name)s: %(message)s', level=logging.INFO)
+logging.basicConfig(format='%(asctime)s:%(levelname)s:%(name)s: %(message)s', 
+    level=logging.INFO,
+    handlers=[
+        logging.StreamHandler()
+    ]
+)
 
 cwd = getcwd()
 
@@ -26,15 +32,29 @@ except FileExistsError:
 try:
     config = (load(open("config.json",)))
 except FileNotFoundError:
-    logging.warning("config.json not found. Creating config")
+    logging.warning("config.json not found. Creating config\nPlease populate the config before starting the program again!")
     dump({
         "logins": list(),
         "rewards": dict(),
         "app_auth": ("App_ID","App_Secret"),
-        "user_auth": tuple()
+        "user_auth": tuple(),
+        "logging": False
     }, open("config.json","w"), sort_keys=True, indent=4)
     config = (load(open("config.json",)))
+    input("Press ENTER to close...")
     exit()
+
+# Sets up file logging if enabled in config
+if config["logging"] is True:
+    try: 
+        mkdir(cwd+"\\logs")
+    except FileExistsError:
+        pass
+    handler = logging.FileHandler(f"logs\\{(datetime.now()).strftime('%d.%m.%Y-%H.%M.%S')}.log")
+    handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
+    handler.setLevel(logging.INFO)
+    logging.getLogger().addHandler(handler)
+    del(handler)
 
 # Checks app_auth has been filled out by user
 if config["app_auth"][0] == "App_ID" or config["app_auth"][0] == "App_Secret":
@@ -85,5 +105,6 @@ pubsub = PubSub(twitch)
 pubsub.start()
 uuid = pubsub.listen_channel_points(user_id,  callback_channel_points)
 # Likely a better way to block the program than this
-input('press ENTER to close...\n')
+logging.info("Listening to Twitch PubSub")
+input("press ENTER to close...\n")
 pubsub.stop()
