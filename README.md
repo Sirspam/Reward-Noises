@@ -8,7 +8,7 @@ Simple Twitch listener which plays audio on specified reward redemptions
  2. Download decencies from requirements.txt via pip
  3. Run Reward-Noises.exe (Program will run then close)
  4. Open config.json
- 5. Populate config.json accordingly, check [Config.json Definitions](#Config.json-Example) for info on the config
+ 5. Populate config.json accordingly, check [Config.json Definitions](#Configjson-Example) for info on the config
  6. Create corresponding rewards on [Twitch.tv dashboard](https://dashboard.twitch.tv/). **Ensure that reward name matches name defined in config.json**
 6. Populate audio directory with your audio files (must be .mp3 or .wav) **Ensure that file names match names defined in config.json**
 
