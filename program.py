@@ -1,5 +1,5 @@
 import logging
-from os import getcwd, mkdir, path
+from os import getcwd, mkdir, path, listdir
 from uuid import UUID
 from json import load, dump
 from random import choice
@@ -22,9 +22,9 @@ logging.basicConfig(format='%(asctime)s:%(levelname)s:%(name)s: %(message)s',
 
 cwd = getcwd()
 
-# Creates audio file if it doesn't already exist
+# Creates audio folder if it doesn't already exist
 try:
-    mkdir(cwd+"\\audio")
+    mkdir(cwd+"//audio")
 except FileExistsError:
     pass
 
@@ -38,7 +38,7 @@ except FileNotFoundError:
         "rewards": dict(),
         "app_auth": ("App_ID","App_Secret"),
         "user_auth": tuple(),
-        "logging": False
+        "logging": True
     }, open("config.json","w"), sort_keys=True, indent=4)
     config = (load(open("config.json",)))
     input("Press ENTER to close...")
@@ -47,10 +47,10 @@ except FileNotFoundError:
 # Sets up file logging if enabled in config
 if config["logging"] is True:
     try: 
-        mkdir(cwd+"\\logs")
+        mkdir(cwd+"//logs")
     except FileExistsError:
         pass
-    handler = logging.FileHandler(f"logs\\{(datetime.now()).strftime('%d.%m.%Y-%H.%M.%S')}.log")
+    handler = logging.FileHandler(f"logs//{(datetime.now()).strftime('%d.%m.%Y-%H.%M.%S')}.log")
     handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
     handler.setLevel(logging.INFO)
     logging.getLogger().addHandler(handler)
@@ -59,26 +59,47 @@ if config["logging"] is True:
 # Checks app_auth has been filled out by user
 if config["app_auth"][0] == "App_ID" or config["app_auth"][0] == "App_Secret":
     logging.error("app_auth hasn't been filled out! This can be done from the config.json file.\nIf you haven't created an application go to https://dev.twitch.tv/console")
+    input("Press ENTER to close...")
     exit()
 
 # Checks logins has been filled out by user
 if not config["logins"]:
     logging.error("logins hasn't been filled out! This can be done from the config.json file.")
+    input("Press ENTER to close...")
     exit()
 
 # Checks all reward audio files are valid
+failed = False
+parsed_rewards = dict()
 for reward in config["rewards"]:
-    for audio in config["rewards"][reward]:
-        if not path.exists(cwd+"\\audio\\"+audio):
-            logging.error(f"Audio file {audio} not found!\nMake sure it's in the audio file.")
-            exit()
+    parsed_rewards[reward] = list()
+    audio = config["rewards"][reward]
+    if audio[-4:] == ".mp3" or audio[-4:] == ".wav":
+        if not path.exists(cwd+"//audio//"+audio):
+            logging.error(f"Audio file {audio} not found!\nMake sure it's in the audio folder.")
+            failed = True
+        else:
+            parsed_rewards[reward].append(cwd+"//audio//"+audio)
+    else:
+        try:
+            for dir_file in listdir(cwd+"//audio//"+audio):
+                if dir_file[-4:] == ".mp3" or dir_file[-4:] == ".wav":
+                    parsed_rewards[reward].append(cwd+"//audio//"+audio+"//"+dir_file)
+        except FileNotFoundError:
+            logging.error(f"Directory {cwd+'//audio//'+audio} not found!")
+            failed = True
+if failed is True:
+    input("Press ENTER to close...")
+    exit()
+del failed
+
 
 def callback_channel_points(uuid: UUID, data: dict):
     for reward in config["rewards"]:
         if data["data"]["redemption"]["reward"]["title"] == reward:
             logging.info(f"{data['data']['redemption']['reward']['title']} redeemed")
-            audio = choice(config["rewards"][reward])
-            playsound(cwd+"\\audio\\"+audio, block=False)
+            audio = choice(parsed_rewards[reward])
+            playsound(audio, block=False)
             logging.info(f"{audio} played")
 
 def user_authenticate():

@@ -4,4 +4,5 @@ logs
 build
 config.json
 py2exe config.json
-versionfile.yml
+pyinstaller-versionfile.yml
+file-version.txt
