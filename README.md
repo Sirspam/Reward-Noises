@@ -1,3 +1,4 @@
+
 # Reward-Noises
 
 Simple Twitch listener which plays audio on specified reward redemptions
@@ -25,6 +26,7 @@ If a folder name is provided all of the mp3 and wav files in that folder will be
 
     {"reward_name": "audio_file_name_and_extension"}
 or
+
     {"reward_name": "folder_containing_mp3_and_wav_files"}
 
 #### user_auth
