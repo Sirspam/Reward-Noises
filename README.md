@@ -1,3 +1,4 @@
+# Reward-Noises has been [rewritten by Raine](https://github.com/dawnvt/Reward-Noises), it's recommended to use that version rather than this.
 
 # Reward-Noises
 
