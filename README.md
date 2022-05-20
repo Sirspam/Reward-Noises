@@ -1,6 +1,5 @@
-# Reward-Noises is being [rewritten by Raine](https://github.com/dawnvt/Reward-Noises), it's recommended to use that version rather than this.
-
 # Reward-Noises
+*Reward-Noises is being [rewritten by Raine](https://github.com/dawnvt/Reward-Noises), it's recommended to use Raine's version, when it's available, as this repo is no longer being maintained.*
 
 Simple Twitch listener which plays audio on specified reward redemptions
 
